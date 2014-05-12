@@ -26,8 +26,6 @@ def geoip(inp):
 
     if inp[0:7] == 'http://':
             inp = inp[7:]
-    if inp[0:5] == 'www.':
-            inp = inp[5:]
 
     # Current API does not support hostnames, so we convert it to IP here
 
