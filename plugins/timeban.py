@@ -1,7 +1,7 @@
+from op import mode_cmd
 from util import hook
-import time, threading
-from cStringIO import StringIO
-import Queue
+from threading import Timer
+
 
 #@hook.command('timeban', permissions=["timeout"], autohelp=False)
 @hook.command
@@ -31,15 +31,13 @@ def timeban(inp, conn=None):
         timebanned_raw = long(long(timebanned_raw[:-1]) * 3600 * 24 * 7)
         timeban_final = timebanned_raw
 
-
-    #    conn.gettext(["WHOIS", [str(user)]])
-    #    hostname_unfil = conn.gettext(["WHOIS", [str(user)]])
-#   This is where i fail ----> hostname_unfil = raw whois output for user
-    #how would i get the whois data :(
-
-
-    hostname = hostname_unfil[hostname_unfil.find('@'):hostname_unfil(')')]
-
-    conn.cmd("BAN", ["*!*" + str(hostname)])
-    conn.cmd("KICK", ['#coding', str(user), str(inp)])
-    threading.Timer(int(timeban_final), conn.cmd("UNBAN", '*!*' + hostname))
+    #inp has now been stripped of everything but the reason
+    timeban_final = long(timeban_final)
+    mode_ban  = "+b"
+    mode_unban = "-b"
+    channel = "#coding"
+    conn.send("MODE {} {} {}".format(channel, mode_ban, str(user)))
+    conn.send("KICK {} {} {}".format(channel, str(user), str(inp)))
+    unban_cmd = conn.send("MODE {} {} {}".format(channel, mode_unban, str(user)))
+    unban = Timer(timeban_final, unban_cmd)
+    unban.start()
