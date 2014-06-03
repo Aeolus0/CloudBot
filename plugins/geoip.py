@@ -36,9 +36,12 @@ def geoip(inp):
 
     url = 'http://www.telize.com/geoip/'
     json_resp = http.get_json(url + inp)
-
+    final_return = ""
     #final validity check
     if is_valid_ip(inp):
-        return u'The IP {} originates from {} with {} as an ISP. Its latitude and longitude are {} and {}'.format(json_resp['ip'], json_resp['country'], json_resp['isp'], json_resp['latitude'], json_resp['longitude'])
+        info = json_resp.items()
+        for iter in range(1,len(json_resp) + 1):
+            final_return += json_resp.key()[iter] + ": " + json_resp.values()[iter]
+        return final_return
     else:
         return u'The IP {} is not a valid IP'.format(inp)
