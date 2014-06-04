@@ -22,7 +22,7 @@ def geoip(inp):
         except:
             return False
 
-    # strips the http:// and www. from the input
+    # strips the http:// from the input
 
     if inp[0:7] == 'http://':
             inp = inp[7:]
@@ -40,8 +40,8 @@ def geoip(inp):
     #final validity check
     if is_valid_ip(inp):
         info = json_resp.items()
-        for iter in range(1,len(json_resp) + 1):
-            final_return += json_resp.key()[iter] + ": " + json_resp.values()[iter]
+        for iter in range(1,len(info) + 1):
+            final_return += "\x02" + json_resp.key()[iter] + "\x02" + ": " + json_resp.values()[iter]
         return final_return
     else:
         return u'The IP {} is not a valid IP'.format(inp)
